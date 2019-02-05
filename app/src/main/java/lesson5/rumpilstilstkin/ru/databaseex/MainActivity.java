@@ -349,7 +349,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tempList.addChangeListener(realmModels -> {
             int size = realmModels.size();
             Date first = new Date();
-            realm.executeTransaction(realm -> realmModels.deleteAllFromRealm());
             realm.executeTransactionAsync(realm1 -> {
                 realmModels.deleteAllFromRealm();
             },() -> {
