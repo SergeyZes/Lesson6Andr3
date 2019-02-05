@@ -30,6 +30,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -311,6 +312,67 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         realm.close();
         return bundle;
     }
+    private void saveRealm2() {
+        realm = Realm.getDefaultInstance();
+        Date first = new Date();
+
+        realm.executeTransactionAsync(realm1 -> {
+            for (Model curItem : modelList) {
+                    RealmModel realmModel = realm1.createObject(RealmModel.class);
+                    realmModel.setUserID(curItem.getUserId());
+                    realmModel.setLogin(curItem.getLogin());
+                    realmModel.setAvatarUrl(curItem.getAvatar());
+            }
+
+        },() -> {
+            Date second = new Date();
+            long count = realm.where(RealmModel.class).count();
+            progressBar.setVisibility(View.GONE);
+            mInfoTextView.append("количество = " + count +
+                    "\n милисекунд = " + (second.getTime() - first.getTime()));
+            realm.close();
+
+        },error -> {
+            System.out.println("onFailure " + error.getMessage());
+            mInfoTextView.setText("onFailure " + error.getMessage());
+            progressBar.setVisibility(View.GONE);
+            realm.close();
+
+        });
+
+    }
+
+    private void deleteAllRealm2() {
+        realm = Realm.getDefaultInstance();
+
+        final RealmResults<RealmModel> tempList = realm.where(RealmModel.class).findAllAsync();
+        tempList.addChangeListener(realmModels -> {
+            int size = realmModels.size();
+            Date first = new Date();
+            realm.executeTransaction(realm -> realmModels.deleteAllFromRealm());
+            realm.executeTransactionAsync(realm1 -> {
+                realmModels.deleteAllFromRealm();
+            },() -> {
+                Date second = new Date();
+                progressBar.setVisibility(View.GONE);
+                mInfoTextView.append("количество = " + size +
+                        "\n милисекунд = " + (second.getTime() - first.getTime()));
+                realm.close();
+
+            },error -> {
+                System.out.println("onFailure " + error.getMessage());
+                mInfoTextView.setText("onFailure " + error.getMessage());
+                progressBar.setVisibility(View.GONE);
+                realm.close();
+
+            });
+
+        });
+
+
+
+    }
+
 
     private Bundle getAllRealm() {
         realm = Realm.getDefaultInstance();
