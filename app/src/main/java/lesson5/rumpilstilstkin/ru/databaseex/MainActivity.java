@@ -60,6 +60,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button btnSaveAllSQLite;
     Button btnSelectAllSQLite;
     Button btnDeleteAllSQLite;
+    Button btnSaveAllRealmAsync;
+    Button btnSelectAllRealmAsync;
+    Button btnDeleteAllRealmAsync;
 
     List<Model> modelList = new ArrayList<>();
     Realm realm;
@@ -94,6 +97,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnSaveAllSQLite = findViewById(R.id.btnSaveAllSQLite);
         btnSelectAllSQLite = findViewById(R.id.btnSelectAllSQLite);
         btnDeleteAllSQLite = findViewById(R.id.btnDeleteAllSQLite);
+        btnSaveAllRealmAsync = findViewById(R.id.btnSaveAllRealmAsync);
+        btnSelectAllRealmAsync = findViewById(R.id.btnSelectAllRealmAsync);
+        btnDeleteAllRealmAsync = findViewById(R.id.btnDeleteAllRealmAsync);
 
 
         btnLoad.setOnClickListener(this);
@@ -109,6 +115,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnSaveAllSQLite.setOnClickListener(this);
         btnSelectAllSQLite.setOnClickListener(this);
         btnDeleteAllSQLite.setOnClickListener(this);
+        btnSaveAllRealmAsync.setOnClickListener(this);
+        btnSelectAllRealmAsync.setOnClickListener(this);
+        btnDeleteAllRealmAsync.setOnClickListener(this);
     }
 
     @Override
@@ -152,6 +161,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btnDeleteAllSQLite:
                 execute(this::deleteAllSQLite);
+                break;
+            case R.id.btnSaveAllRealmAsync:
+                saveRealm2();
+                break;
+            case R.id.btnSelectAllRealmAsync:
+                getAllRealm2();
+                break;
+            case R.id.btnDeleteAllRealmAsync:
+                deleteAllRealm2();
                 break;
         }
     }
@@ -312,19 +330,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         realm.close();
         return bundle;
     }
+
     private void saveRealm2() {
+        mInfoTextView.setText("");
         realm = Realm.getDefaultInstance();
         Date first = new Date();
 
         realm.executeTransactionAsync(realm1 -> {
             for (Model curItem : modelList) {
-                    RealmModel realmModel = realm1.createObject(RealmModel.class);
-                    realmModel.setUserID(curItem.getUserId());
-                    realmModel.setLogin(curItem.getLogin());
-                    realmModel.setAvatarUrl(curItem.getAvatar());
+                RealmModel realmModel = realm1.createObject(RealmModel.class);
+                realmModel.setUserID(curItem.getUserId());
+                realmModel.setLogin(curItem.getLogin());
+                realmModel.setAvatarUrl(curItem.getAvatar());
             }
 
-        },() -> {
+        }, () -> {
             Date second = new Date();
             long count = realm.where(RealmModel.class).count();
             progressBar.setVisibility(View.GONE);
@@ -332,7 +352,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     "\n милисекунд = " + (second.getTime() - first.getTime()));
             realm.close();
 
-        },error -> {
+        }, error -> {
             System.out.println("onFailure " + error.getMessage());
             mInfoTextView.setText("onFailure " + error.getMessage());
             progressBar.setVisibility(View.GONE);
@@ -343,22 +363,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void deleteAllRealm2() {
+        mInfoTextView.setText("");
         realm = Realm.getDefaultInstance();
 
         final RealmResults<RealmModel> tempList = realm.where(RealmModel.class).findAllAsync();
         tempList.addChangeListener(realmModels -> {
             int size = realmModels.size();
             Date first = new Date();
+            tempList.removeAllChangeListeners();
+
             realm.executeTransactionAsync(realm1 -> {
-                realmModels.deleteAllFromRealm();
-            },() -> {
+                realm1.deleteAll();
+                //realmModels.deleteAllFromRealm();
+            }, () -> {
                 Date second = new Date();
                 progressBar.setVisibility(View.GONE);
                 mInfoTextView.append("количество = " + size +
                         "\n милисекунд = " + (second.getTime() - first.getTime()));
                 realm.close();
 
-            },error -> {
+            }, error -> {
                 System.out.println("onFailure " + error.getMessage());
                 mInfoTextView.setText("onFailure " + error.getMessage());
                 progressBar.setVisibility(View.GONE);
@@ -367,9 +391,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             });
 
         });
+    }
 
+    private void getAllRealm2() {
+        mInfoTextView.setText("");
+        realm = Realm.getDefaultInstance();
+        Date first = new Date();
 
-
+        final RealmResults<RealmModel> tempList = realm.where(RealmModel.class).findAllAsync();
+        tempList.addChangeListener(realmModels -> {
+            int size = realmModels.size();
+            Date second = new Date();
+            progressBar.setVisibility(View.GONE);
+            mInfoTextView.append("количество = " + size +
+                    "\n милисекунд = " + (second.getTime() - first.getTime()));
+            realm.close();
+        });
     }
 
 
