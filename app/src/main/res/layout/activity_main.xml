@@ -36,12 +36,12 @@
 
             <TextView
                 android:id="@+id/tvLoad"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="2" />
+                android:layout_weight="4" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical">
@@ -55,67 +55,111 @@
                     android:id="@+id/btnSaveAllSugar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Сохранить в БД" />
+                    android:text="Сохр." />
 
                 <Button
                     android:id="@+id/btnSelectAllSugar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Показать все" />
+                    android:text="Пок.все" />
 
                 <Button
                     android:id="@+id/btnDeleteAllSugar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Удалить все" />
+                    android:text="Уд. все" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
                     android:text="Realm" />
 
                 <Button
                     android:id="@+id/btnSaveAllRealm"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Сохранить в БД" />
+                    android:text="Сохр." />
 
                 <Button
                     android:id="@+id/btnSelectAllRealm"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Показать все" />
+                    android:text="Пок.все" />
 
                 <Button
                     android:id="@+id/btnDeleteAllRealm"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Удалить все" />
+                    android:text="Уд. все" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
                     android:text="Room" />
 
                 <Button
                     android:id="@+id/btnSaveAllRoom"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Сохранить в БД" />
+                    android:text="Сохр." />
 
                 <Button
                     android:id="@+id/btnSelectAllRoom"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Показать все" />
+                    android:text="Пок.все" />
 
                 <Button
                     android:id="@+id/btnDeleteAllRoom"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Удалить все" />
+                    android:text="Уд. все" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="SQLite" />
+
+                <Button
+                    android:id="@+id/btnSaveAllSQLite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Сохр." />
+
+                <Button
+                    android:id="@+id/btnSelectAllSQLite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Пок.все" />
+
+                <Button
+                    android:id="@+id/btnDeleteAllSQLite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Уд. все" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="RealmAsync" />
+
+                <Button
+                    android:id="@+id/btnSaveAllRealmAsync"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Сохр." />
+
+                <Button
+                    android:id="@+id/btnSelectAllRealmAsync"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Пок.все" />
+
+                <Button
+                    android:id="@+id/btnDeleteAllRealmAsync"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Уд. все" />
+
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
