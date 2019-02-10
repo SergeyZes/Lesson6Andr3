@@ -24,6 +24,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import javax.inject.Inject;
+
 import io.reactivex.Single;
 import io.reactivex.SingleOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -44,6 +46,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private final static String EXT_TIME = "ext_time";
     private final static String EXT_COUNT = "ext_count";
     private WorkWithDB workWithDB;
+
+    @Inject
+    NetworkInfo networkinfo;
 
     private TextView mInfoTextView;
     private ProgressBar progressBar;
@@ -71,6 +76,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        AppComponent appComponent = MainApp.getComponent();
+        appComponent.injectsToMainActivity(this);
+
         initViews();
         workWithDB = new WorkWithDB(getApplicationContext());
     }
@@ -201,9 +210,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void loadData() {
         mInfoTextView.setText("");
-        ConnectivityManager connectivityManager =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkinfo = connectivityManager.getActiveNetworkInfo();
 
         if (networkinfo != null && networkinfo.isConnected()) {
             // запускаем

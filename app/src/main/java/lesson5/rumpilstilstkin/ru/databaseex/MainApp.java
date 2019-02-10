@@ -10,6 +10,7 @@ import io.realm.RealmConfiguration;
 
 public class MainApp extends Application {
     private static AppDatabase db;
+    private static AppComponent component;
 
     @Override
     public void onCreate() {
@@ -23,10 +24,16 @@ public class MainApp extends Application {
 
         db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "database").build();
+        component = DaggerAppComponent.builder().networkInfomodule(new NetworkInfomodule(this)).build();
+
     }
 
-    public static AppDatabase getDb(){
+    public static AppDatabase getDb() {
         return db;
+    }
+
+    public static AppComponent getComponent() {
+        return component;
     }
 }
 
